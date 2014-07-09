@@ -29,7 +29,10 @@ module.exports = function(config) {
 
     // the default configuration
     jasmineRunnerReporter: {
-      outputFile: 'jasmine-runner.html'
+      outputFile: 'jasmine-runner.html',
+      includes: [
+        "node_modules/jasmine-expect/dist/jasmine-matchers.js"
+      ]
     }
   });
 };
