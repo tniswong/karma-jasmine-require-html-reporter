@@ -1,0 +1,26 @@
+{
+  "name": "karma-jasmine-runner-reporter",
+  "version": "0.1.0",
+  "description": "A Karma plugin. Report results in Jasmine Test Runner format.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ariesb/karma-jasmine-runner-reporter.git"
+  },
+  "keywords": [
+    "karma-plugin",
+    "karma-reporter",
+    "jasmine-runner"
+  ],
+  "author": "Aries Beltran <aries.beltran@gmail.com>",
+  "dependencies": {
+    "simplet": "~0.1.2"
+  },
+  "peerDependencies": {
+    "karma": ">=0.10"
+  },
+  "license": "MIT"
+}
