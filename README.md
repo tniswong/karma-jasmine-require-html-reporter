@@ -23,7 +23,6 @@ npm install karma-jasmine-runner-reporter --save-dev
 Following code shows the default configuration...
 ```js
 // karma.conf.js
-// karma.conf.js
 module.exports = function(config) {
   config.set({
     reporters: ['progress', 'jasmine-runner'],
