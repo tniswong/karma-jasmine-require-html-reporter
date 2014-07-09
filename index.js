@@ -15,7 +15,8 @@ var JasmineRunnerReporter = function(config, logger, helper) {
   this.adapters = [];
 
   this.onRunStart = function(browsers) {
-    var files = config.files;
+    var files = config.files || {};
+    var extensions = reporterConfig.includes || [];
     var specs = [];
     files.forEach(function(file) {
       if( file.watched ) {
@@ -25,7 +26,7 @@ var JasmineRunnerReporter = function(config, logger, helper) {
     });
 
     var includes = [];
-    reporterConfig.includes.forEach(function(file) {
+    extensions.forEach(function(file) {
       var sourceFile = helper.normalizeWinPath(path.relative(runnerBase, file));
       includes.push(tmpl.replace('$file', sourceFile));
     });
