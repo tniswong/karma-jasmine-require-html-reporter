@@ -23,11 +23,18 @@ var JasmineRunnerReporter = function(config, logger, helper) {
         specs.push(tmpl.replace('$file', sourceFile));
       }
     });
+
+    var includes = [];
+    reporterConfig.includes.forEach(function(file) {
+      var sourceFile = helper.normalizeWinPath(path.relative(runnerBase, file));
+      includes.push(tmpl.replace('$file', sourceFile));
+    });
     
     var fileEngine = simplet();
     var output = fileEngine.render( __dirname + '/runner-template.html', {
         lib: helper.normalizeWinPath(path.relative(runnerBase, __dirname)),
-        specs: specs.join('\n')
+        extensions: includes.join('\n  '),
+        specs: specs.join('\n  ')
     });
     
     helper.mkdirIfNotExists(path.dirname(outputFile), function() {
