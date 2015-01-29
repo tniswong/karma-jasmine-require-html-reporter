@@ -1,5 +1,5 @@
 {
-  "name": "karma-jasmine-runner-reporter",
+  "name": "karma-jasmine-require-html-reporter",
   "version": "0.1.0",
   "description": "A Karma plugin. Report results in Jasmine Test Runner format.",
   "main": "index.js",
@@ -8,12 +8,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/tniswong/karma-jasmine-runner-reporter.git"
+    "url": "git://github.com/tniswong/karma-jasmine-require-html-reporter.git"
   },
   "keywords": [
     "karma-plugin",
     "karma-reporter",
-    "jasmine-runner"
+    "jasmine-require-html"
   ],
   "author": "Todd Niswonger <tniswong@gmail.com>",
   "dependencies": {

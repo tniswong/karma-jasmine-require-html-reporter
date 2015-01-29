@@ -8,7 +8,7 @@
 
         JasmineRequireReporter = function(config, logger, helper) {
 
-            var log = logger.create('reporter.jasmine-require'),
+            var log = logger.create('reporter.jasmine-require-html'),
                 reporterConfig = config.jasmineRunnerReporter || {
                         basePath: '',
                         outputFile: '_SpecRunner.html',
