@@ -87,7 +87,7 @@
     JasmineRequireReporter.$inject = ['config', 'logger', 'helper'];
 
     module.exports = {
-        'reporter:jasmine-require': ['type', JasmineRequireReporter]
+        'reporter:jasmine-require-html': ['type', JasmineRequireReporter]
     };
 
 }(module));
