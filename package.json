@@ -8,19 +8,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/ariesb/karma-jasmine-runner-reporter.git"
+    "url": "git://github.com/tniswong/karma-jasmine-runner-reporter.git"
   },
   "keywords": [
     "karma-plugin",
     "karma-reporter",
     "jasmine-runner"
   ],
-  "author": "Aries Beltran <aries.beltran@gmail.com>",
+  "author": "Todd Niswonger <tniswong@gmail.com>",
   "dependencies": {
+    "glob": "^4.3.5",
     "simplet": "~0.1.2"
   },
   "peerDependencies": {
-    "karma": ">=0.10"
+
   },
   "license": "MIT"
 }
