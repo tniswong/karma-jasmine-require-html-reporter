@@ -1,7 +1,8 @@
 (function (module) {
     'use strict';
 
-    var path = require('path'),
+    var _ = require('lodash'),
+        path = require('path'),
         fs = require('fs'),
         simplet = require('simplet'),
         glob = require('glob'),
@@ -9,14 +10,14 @@
         JasmineRequireReporter = function(config, logger, helper) {
 
             var log = logger.create('reporter.jasmine-require-html'),
-                reporterConfig = config.jasmineRequireHtml || {
+                reporterConfig = _.extend({}, config.jasmineRequireHtml, {
                         basePath: '',
                         outputFile: '_SpecRunner.html',
                         baseUrl: null,
                         requireConfig: null,
                         specPattern: /\.spec\.js$/
-                    },
-                outputFile = helper.normalizeWinPath(path.resolve(config.basePath, reporterConfig.outputFile)),
+                    }),
+                outputFile = helper.normalizeWinPath(path.resolve(reporterConfig.basePath, reporterConfig.outputFile)),
                 runnerBase = path.dirname(outputFile);
 
             this.adapters = [];
@@ -24,7 +25,7 @@
             this.onRunStart = function(browsers) {
 
                 var filesGlobs = config.files || {},
-                    requireConfig = typeof reporterConfig.requireConfig === "object" ? reporterConfig.requireConfig : (function () {
+                    requireConfig = reporterConfig.requireConfig && typeof reporterConfig.requireConfig === "object" ? reporterConfig.requireConfig : (function () {
 
                         var decorateConfig = function (config) {
                                 config.baseUrl = reporterConfig.baseUrl || config.baseUrl;
