@@ -18,10 +18,9 @@
   "author": "Todd Niswonger <tniswong@gmail.com>",
   "dependencies": {
     "glob": "^4.3.5",
+    "lodash": "^3.0.0",
     "simplet": "~0.1.2"
   },
-  "peerDependencies": {
-
-  },
+  "peerDependencies": {},
   "license": "MIT"
 }
