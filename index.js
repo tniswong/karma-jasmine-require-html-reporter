@@ -10,13 +10,13 @@
         JasmineRequireReporter = function(config, logger, helper) {
 
             var log = logger.create('reporter.jasmine-require-html'),
-                reporterConfig = _.extend({}, config.jasmineRequireHtml, {
-                        basePath: '',
-                        outputFile: '_SpecRunner.html',
-                        baseUrl: null,
-                        requireConfig: null,
-                        specPattern: /\.spec\.js$/
-                    }),
+                reporterConfig = _.extend({}, {
+                    basePath: '',
+                    outputFile: '_SpecRunner.html',
+                    baseUrl: null,
+                    requireConfig: null,
+                    specPattern: /\.spec\.js$/
+                }, config.jasmineRequireHtml),
                 outputFile = helper.normalizeWinPath(path.resolve(reporterConfig.basePath, reporterConfig.outputFile)),
                 runnerBase = path.dirname(outputFile);
 
