@@ -1,63 +1,93 @@
-var path = require('path');
-var fs = require('fs');
-var simplet = require('simplet');
-var glob = require('glob');
+(function (module) {
+    'use strict';
 
-var JasmineRunnerReporter = function(config, logger, helper) {
+    var path = require('path'),
+        fs = require('fs'),
+        simplet = require('simplet'),
+        glob = require('glob'),
 
-    var log = logger.create('reporter.jasmine-runner');
-    var reporterConfig = config.jasmineRunnerReporter || {};
-    var outputFile = helper.normalizeWinPath(path.resolve(config.basePath,reporterConfig.outputFile || 'jasmine-runner.html'));
-    var tmpl = '<script type="text/javascript" src="$file"></script>';
-    var runnerBase = path.dirname(outputFile);
+        JasmineRequireReporter = function(config, logger, helper) {
 
-    this.adapters = [];
+            var log = logger.create('reporter.jasmine-require'),
+                reporterConfig = config.jasmineRunnerReporter || {
+                        basePath: '',
+                        outputFile: '_SpecRunner.html',
+                        baseUrl: null,
+                        requireConfig: null,
+                        specPattern: /\.spec\.js$/
+                    },
+                outputFile = helper.normalizeWinPath(path.resolve(config.basePath, reporterConfig.outputFile)),
+                runnerBase = path.dirname(outputFile);
 
-    this.onRunStart = function(browsers) {
+            this.adapters = [];
 
-        var files = config.files || {};
-        var extensions = reporterConfig.includes || [];
-        var specs = [];
+            this.onRunStart = function(browsers) {
 
-        files.forEach(function(file) {
-            if (file.watched) {
-                var sourceFile = helper.normalizeWinPath(path.relative(runnerBase, file.pattern));
-                specs.push(tmpl.replace('$file', sourceFile));
-            }
-        });
+                var filesGlobs = config.files || {},
+                    requireConfig = typeof reporterConfig.requireConfig === "object" ? reporterConfig.requireConfig : (function () {
 
-        var includes = [];
+                        var decorateConfig = function (config) {
+                                config.baseUrl = reporterConfig.baseUrl || config.baseUrl;
+                                return config;
+                            },
 
-        extensions.forEach(function(file) {
-            var sourceFile = helper.normalizeWinPath(path.relative(runnerBase, file));
-            includes.push(tmpl.replace('$file', sourceFile));
-        });
-    
-        var fileEngine = simplet();
-        var output = fileEngine.render( __dirname + '/runner-template.html', {
-            lib: helper.normalizeWinPath(path.relative(runnerBase, __dirname)),
-            extensions: includes.join('\n  '),
-            specs: specs.join('\n  ')
-        });
-    
-        helper.mkdirIfNotExists(path.dirname(outputFile), function() {
+                        /* jshint evil: true */
+                            retrieveDecoratedConfig = new Function('require', 'return ' + fs.readFileSync(reporterConfig.requireConfig, {encoding: "UTF-8"}));
+                        /* jshint evil: false */
 
-            fs.writeFile(outputFile, output, function(err) {
-                if (err) {
-                    log.warn('Cannot write Jasmine Runner HTML\n\t' + err.message);
-                } else {
-                    log.debug('Jasmine Runner results written to "%s".', outputFile);
-                }
-            });
+                        /**
+                         * Passes a mocked require.config function as parameter that returns the RequireJS config object,
+                         * decorated with our dynamic includes.
+                         */
+                        return retrieveDecoratedConfig({
+                            config: function (config) {
+                                return decorateConfig(config);
+                            }
+                        });
 
-        });
+                    }()),
+                    specs = [];
 
+                filesGlobs.forEach(function (filesGlob) {
+                    if (filesGlob.watched) {
+
+                        var normalizedFilesGlob = helper.normalizeWinPath(path.relative(runnerBase, filesGlob.pattern));
+
+                        glob.sync(normalizedFilesGlob).forEach(function (file) {
+                            if (reporterConfig.specPattern.test(file)) {
+                                specs.push(file);
+                            }
+                        });
+
+                    }
+                });
+
+                var output = simplet().render( __dirname + '/runner-template.html', {
+                    lib: helper.normalizeWinPath(path.relative(runnerBase, __dirname)),
+                    specs: specs,
+                    requireConfig: requireConfig
+                });
+
+                helper.mkdirIfNotExists(path.dirname(outputFile), function() {
+
+                    fs.writeFile(outputFile, output, function(err) {
+                        if (err) {
+                            log.warn('Cannot write Jasmine Runner HTML\n\t' + err.message);
+                        } else {
+                            log.debug('Jasmine Runner results written to "%s".', outputFile);
+                        }
+                    });
+
+                });
+
+            };
+
+        };
+
+    JasmineRequireReporter.$inject = ['config', 'logger', 'helper'];
+
+    module.exports = {
+        'reporter:jasmine-require': ['type', JasmineRequireReporter]
     };
 
-};
-
-JasmineRunnerReporter.$inject = ['config', 'logger', 'helper'];
-
-module.exports = {
-  'reporter:jasmine-runner': ['type', JasmineRunnerReporter]
-};
+}(module));

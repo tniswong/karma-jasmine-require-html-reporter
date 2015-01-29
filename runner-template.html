@@ -8,19 +8,16 @@
         <script type="text/javascript" src="<%= lib %>/lib/jasmine-2.1.3/jasmine.js"></script>
         <script type="text/javascript" src="<%= lib %>/lib/jasmine-2.1.3/jasmine-html.js"></script>
         <script type="text/javascript" src="<%= lib %>/lib/jasmine-2.1.3/boot.js"></script>
-
-        <script type="text/javascript" src="<%= lib %>/requirejs/require.js"></script>
+        <script type="text/javascript" src="<%= lib %>/lib/requirejs/require.js"></script>
 
         <script type="text/javascript">
             var startTests = window.onload;
             window.onload = null;
 
-            <%= requireConfig %>
+            require.config(<%= requireConfig %>);
 
-            require([
-                <%= specs %>
-            ], function() {
-                  startTests();
+            require(<%= specs %>, function() {
+                startTests();
             });
 
         </script>
